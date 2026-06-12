@@ -1,0 +1,28 @@
+# Local stack: pgvector Postgres + the API.
+#   docker compose up -d db
+#   psql postgresql://postgres:postgres@localhost:5432/askdesk -f db/schema.sql
+#   uv run python scripts/ingest_corpus.py corpus/sample
+#   docker compose up api
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: askdesk
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      ASKDESK_DATABASE_URL: postgresql://postgres:postgres@db:5432/askdesk
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:

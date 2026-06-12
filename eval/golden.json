@@ -1,0 +1,69 @@
+{
+  "thresholds": {
+    "retrieval_hit_rate": 0.9,
+    "groundedness_rate": 0.9,
+    "keyword_recall": 0.8
+  },
+  "cases": [
+    {
+      "id": "refund-window",
+      "question": "How long do customers have to request a full refund?",
+      "expected_source": "refund-policy.md",
+      "expected_keywords": ["30 days"]
+    },
+    {
+      "id": "refund-method",
+      "question": "How quickly are refunds issued and to what payment method?",
+      "expected_source": "refund-policy.md",
+      "expected_keywords": ["original payment method", "5 business days"]
+    },
+    {
+      "id": "refund-large",
+      "question": "Who has to approve a refund over $2,000?",
+      "expected_source": "refund-policy.md",
+      "expected_keywords": ["finance lead"]
+    },
+    {
+      "id": "refund-usage",
+      "question": "Are metered API overage charges refundable?",
+      "expected_source": "refund-policy.md",
+      "expected_keywords": ["non-refundable"]
+    },
+    {
+      "id": "onboarding-ship",
+      "question": "When does a new engineer first ship to production?",
+      "expected_source": "onboarding-guide.md",
+      "expected_keywords": ["first week"]
+    },
+    {
+      "id": "onboarding-dbaccess",
+      "question": "What is required before getting production database access?",
+      "expected_source": "onboarding-guide.md",
+      "expected_keywords": ["security training"]
+    },
+    {
+      "id": "security-secrets",
+      "question": "Where do service secrets live?",
+      "expected_source": "security-policy.md",
+      "expected_keywords": ["vault"]
+    },
+    {
+      "id": "security-triage",
+      "question": "How fast does the on-call security engineer triage during business hours?",
+      "expected_source": "security-policy.md",
+      "expected_keywords": ["30 minutes"]
+    },
+    {
+      "id": "security-pii-export",
+      "question": "What happens to PII exports after they are created?",
+      "expected_source": "security-policy.md",
+      "expected_keywords": ["7 days"]
+    },
+    {
+      "id": "out-of-corpus",
+      "question": "What is the company's policy on office dogs?",
+      "expected_source": null,
+      "expected_keywords": ["does not answer"]
+    }
+  ]
+}
