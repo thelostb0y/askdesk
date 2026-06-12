@@ -11,8 +11,16 @@ from __future__ import annotations
 
 import threading
 from dataclasses import dataclass, field
+from functools import lru_cache
 
 from .config import get_settings
+
+
+@lru_cache
+def _local_model(name: str):
+    from sentence_transformers import SentenceTransformer
+
+    return SentenceTransformer(name)
 
 
 @dataclass
@@ -66,6 +74,17 @@ class Gateway:
         return resp.choices[0].message.content or ""
 
     def embed(self, texts: list[str], usage: Usage | None = None) -> list[list[float]]:
+        # "local/<model>" routes to sentence-transformers on this machine — no
+        # vendor, no data egress (install with the [local] extra). Anything else
+        # goes through LiteLLM to the configured provider.
+        if self.embed_model.startswith("local/"):
+            vectors = _local_model(self.embed_model.removeprefix("local/")).encode(
+                texts, normalize_embeddings=True
+            )
+            if usage is not None:
+                usage.add(sum(len(t.split()) for t in texts), 0, 0.0)
+            return [v.tolist() for v in vectors]
+
         import litellm
 
         resp = litellm.embedding(model=self.embed_model, input=texts)

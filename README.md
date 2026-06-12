@@ -25,7 +25,7 @@ Teams point AskDesk at their documents and get back a service their apps can cal
 |---|---|
 | **Hybrid retrieval (pgvector + tsvector, RRF)** | Vector search catches paraphrases; keyword catches exact terms (ids, names) embeddings blur. RRF fuses rankings without comparable scores. |
 | **Critic agent (adversarial verify)** | LLMs assert; the Critic checks every claim against the cited evidence and bounces ungrounded drafts back (bounded retries). Unparseable verdicts **fail closed**. |
-| **LiteLLM gateway** | One interface to any model provider. Models are env config, not code. Single choke point for token/cost metering. |
+| **LiteLLM gateway** | One interface to any model provider. Models are env config, not code. Single choke point for token/cost metering. Embeddings can also run **fully local** (`ASKDESK_EMBED_MODEL=local/<sentence-transformers model>`, `[local]` extra) — documents never leave your infrastructure. |
 | **Python SDK + shipped fakes** (`askdesk.testing`) | Platform-as-a-product: consumers get a typed client *and* deterministic fakes so they can test against AskDesk with zero network. |
 | **Eval harness as CI gate** | Treats LLM non-determinism as a testing problem: a golden Q&A set scored on retrieval hit rate, groundedness, and keyword recall — the build fails below floors. |
 
@@ -64,7 +64,7 @@ result.usage     # {'prompt_tokens': ..., 'cost_usd': ..., 'llm_calls': 3}
 ## Quality: how non-determinism is handled
 
 - **Offline mode** (CI, default): deterministic `FakeGateway` + in-memory store with the same interface/semantics as pgvector — verifies the *mechanics* (ranking, citation flow, critic loop, fail-closed parsing) on every commit.
-- **Live mode** (`eval/run_eval.py --live`): same golden set against real models + pgvector — measures *answer quality* before a release or after a prompt/model change.
+- **Live mode** (`eval/run_eval.py --live`): same golden set against real models + pgvector — measures *answer quality* before a release or after a prompt/model change. Latest live run (Claude Sonnet analyst/critic, Supabase pgvector, local MiniLM embeddings): **10/10 cases, all metrics 100%**.
 - Groundedness is enforced structurally (Critic loop), not hoped for.
 
 ## Observability

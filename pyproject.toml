@@ -17,6 +17,10 @@ dependencies = [
     "httpx>=0.27",
 ]
 
+[project.optional-dependencies]
+# Fully local embeddings (no vendor, no data egress): ASKDESK_EMBED_MODEL=local/<model>
+local = ["sentence-transformers>=3.0"]
+
 [dependency-groups]
 dev = [
     "pytest>=8.0",
