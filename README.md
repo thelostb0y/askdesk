@@ -1,5 +1,7 @@
 # AskDesk
 
+[![CI](https://github.com/thelostb0y/askdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/thelostb0y/askdesk/actions/workflows/ci.yml)
+
 **An internal AI platform: RAG-grounded, multi-agent Q&A over a private corpus — exposed as an API + Python SDK, with a CI eval gate.**
 
 Teams point AskDesk at their documents and get back a service their apps can call: answers with citations, an explicit groundedness verdict, and per-request token/cost accounting. The platform's promise is *no answer leaves claiming evidence it doesn't have.*
