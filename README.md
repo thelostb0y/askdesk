@@ -64,7 +64,7 @@ result.usage     # {'prompt_tokens': ..., 'cost_usd': ..., 'llm_calls': 3}
 ## Quality: how non-determinism is handled
 
 - **Offline mode** (CI, default): deterministic `FakeGateway` + in-memory store with the same interface/semantics as pgvector — verifies the *mechanics* (ranking, citation flow, critic loop, fail-closed parsing) on every commit.
-- **Live mode** (`eval/run_eval.py --live`): same golden set against real models + pgvector — measures *answer quality* before a release or after a prompt/model change. Latest live run (Claude Sonnet analyst/critic, Supabase pgvector, local MiniLM embeddings): **10/10 cases, all metrics 100%**.
+- **Live mode** (`eval/run_eval.py --live`): same golden set against real models + pgvector — measures *answer quality* before a release or after a prompt/model change. Live runs (Claude Sonnet analyst/critic, Supabase pgvector) scored **10/10, all metrics 100% under both embedding providers** — OpenAI `text-embedding-3-small` and fully local MiniLM — with the swap being two env vars and a re-ingest.
 - Groundedness is enforced structurally (Critic loop), not hoped for.
 
 ## Observability

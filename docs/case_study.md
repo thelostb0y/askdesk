@@ -32,9 +32,12 @@ Offline eval on the sample corpus: **10/10 cases pass; all three metrics at
 100%** (deterministic by construction — the gate exists to catch regressions
 in the platform mechanics, while `--live` measures model quality).
 
-The live run — Claude Sonnet as Analyst/Critic, Supabase pgvector, fully local
-sentence-transformers embeddings (no document egress) — scored **10/10 with
-all metrics at 100%** on the same thresholds. A production `/ask` round trip
+The live runs — Claude Sonnet as Analyst/Critic against Supabase pgvector —
+scored **10/10 with all metrics at 100%** under **two different embedding
+providers**: fully local sentence-transformers (384-dim, no document egress)
+and OpenAI text-embedding-3-small (1536-dim). The provider swap was two env
+vars and a re-ingest; the same gate re-ran unchanged — which is the
+provider-agnostic design doing its job. A production `/ask` round trip
 (SDK → API → agent graph → Claude → pgvector) returns a multi-fact, cited,
 Critic-approved answer in ~12s at a metered **$0.005/request**.
 
