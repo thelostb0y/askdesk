@@ -36,7 +36,7 @@ def main() -> None:
 
     settings = get_settings()
     gateway = Gateway()
-    store = PgVectorStore(settings.database_url)
+    store = PgVectorStore(settings.database_url, db_schema=settings.db_schema)
     usage = Usage()
     total = 0
     for i in range(0, len(chunks), EMBED_BATCH):

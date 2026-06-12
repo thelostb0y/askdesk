@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="ASKDESK_", env_file=".env", extra="ignore")
 
     database_url: str = "postgresql://postgres:postgres@localhost:5432/askdesk"
+    # Postgres schema the chunks table lives in. Lets AskDesk share a database
+    # without touching anyone else's namespace (e.g. per-team corpora).
+    db_schema: str = "public"
     chat_model: str = "anthropic/claude-sonnet-4-6"
     embed_model: str = "openai/text-embedding-3-small"
     embed_dim: int = 1536

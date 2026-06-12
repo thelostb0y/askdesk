@@ -34,13 +34,23 @@ class VectorStore(Protocol):
 
 class PgVectorStore:
     """Postgres + pgvector. Schema in db/schema.sql (chunks table, ivfflat index,
-    tsvector column for keyword search)."""
+    tsvector column for keyword search).
 
-    def __init__(self, database_url: str):
+    `db_schema` pins the search_path so AskDesk can live in a dedicated
+    namespace inside a shared database; `extensions` is included because
+    Supabase installs pgvector there."""
+
+    def __init__(self, database_url: str, db_schema: str = "public"):
         import psycopg
         from pgvector.psycopg import register_vector
+        from psycopg import sql
 
         self._conn = psycopg.connect(database_url, autocommit=True)
+        self._conn.execute(
+            sql.SQL("SET search_path TO {}, extensions, public").format(
+                sql.Identifier(db_schema)
+            )
+        )
         register_vector(self._conn)
 
     def upsert(self, chunks: list[Chunk], embeddings: list[list[float]]) -> int:

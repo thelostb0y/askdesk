@@ -35,7 +35,7 @@ class Runtime:
 def get_runtime() -> Runtime:
     s = get_settings()
     gateway = Gateway()
-    store = PgVectorStore(s.database_url)
+    store = PgVectorStore(s.database_url, db_schema=s.db_schema)
     return Runtime(
         retriever=Retriever(store, gateway, top_k=s.top_k),
         gateway=gateway,

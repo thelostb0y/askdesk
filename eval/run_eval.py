@@ -56,7 +56,7 @@ def build_live_runtime():
 
     s = get_settings()
     gateway = Gateway()
-    store = PgVectorStore(s.database_url)  # corpus must already be ingested
+    store = PgVectorStore(s.database_url, db_schema=s.db_schema)  # corpus already ingested
     return Retriever(store, gateway, top_k=s.top_k), gateway
 
 
